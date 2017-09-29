@@ -1,0 +1,125 @@
+[
+    {
+        "name":"SSD",
+        "v8version": "8.3.9.2170",
+        "preferThinClient": true,
+        "repos":{
+            "main": {
+                "url": "ssh://git@stash.maxus.lan:7999/int/ssd_dev1c.git"
+            }
+        },
+        "storages": [
+            {
+                "tag": "dev",
+                "filePath": "\\\\REPOSITORY17\\Depots83102466\\SSD_DEV",
+                "sync":{
+                    "repo": "main",
+                    "srcPath": "C:/Repo/SSD/src",
+                    "email": "svyaznoy.ru",
+                    "interval": "H/15 9-19 * * 1-5"
+                }
+            },
+            {
+                "tag": "work",
+                "filePath": "\\\\REPOSITORY17\\Depots83102466\\SSD_WORK",
+                "sync":null
+            }
+        ],
+        "builds":[
+            {
+                "tag": "dev",
+                "name": "Сборка из хранилища разработки (DEV)",
+                "repo": "main",
+                "storage": "dev"
+            },
+            {
+                "tag": "work",
+                "name": "Сборка из релизного хранилища (WORK)",
+                "repo": "main",
+                "storage": "work"
+            }
+        ],
+        "deployments":[
+            {
+                "name": "Развертывание из DEV в Test00",
+                "srcBuild": "dev",
+                "auto": true,
+                "target": {
+                    "rasPort": 2541,
+                    "dbServer": "as-msk-n7137:2541",
+                    "db": "ssd_test00",
+                    "credentials": "ssd-test00-deploy"
+                },
+                "steps": [
+                    "loadcfg",
+                    "run:DELETEVIEWS",
+                    "dbupdate",
+                    "run:MIGRATE"
+                ]
+            },
+            {
+                "name": "Развертывание из DEV в Test01",
+                "srcBuild": "dev",
+                "auto": false,
+                "target": {
+                    "rasPort": 2541,
+                    "dbServer":"as-msk-n7137:2541",
+                    "db":"ssd_test01",
+                    "credentials": "ssd-test00-deploy"
+                },
+                "steps": [
+                    "loadcfg",
+                    "run:DELETEVIEWS",
+                    "dbupdate",
+                    "run:MIGRATE"
+                ]
+            }
+        ],
+        "publish" : "work"
+    },
+    
+    {
+        "name":"CQ",
+        "v8version": "8.2.17",
+        "preferThinClient": false,
+        "syntaxChecks": "-Server -ThickClientOrdinaryApplication",
+        "repos":{
+            "main": {
+                "url": "ssh://git@stash.maxus.lan:7999/opm/cq.git"
+            }
+        },
+        "storages": [
+            {
+                "tag": "dev",
+                "filePath": "\\\\REPOSITORY17\\Depots\\cq_dev",
+                "sync":{
+                    "repo": "main",
+                    "srcPath": "C:/Repo/CQ/src",
+                    "email": "svyaznoy.ru",
+                    "interval": "H/15 9-19 * * 1-5"
+                }
+            },
+            {
+                "tag": "work",
+                "filePath": "\\\\REPOSITORY17\\Depots\\cq",
+                "sync":null
+            }
+        ],
+        "builds":[
+            {
+                "tag": "dev",
+                "name": "Сборка из хранилища разработки (DEV)",
+                "repo": "main",
+                "storage": "dev"
+            },
+            {
+                "tag": "work",
+                "name": "Сборка из релизного хранилища (WORK)",
+                "repo": "main",
+                "storage": "work"
+            }
+        ],
+        "deployments":[],
+        "publish" : "work"
+    }
+]
